@@ -40,9 +40,23 @@ jobs:
           healthcheck: "https://pokedex-jhiekkap.herokuapp.com/health"
           checkstring: "ok"
           delay: 5
+      - name: Test Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() && github.event_name == 'push' }} 
+        with:
+          severity: info
+          details: A new version of Pokedex deployed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() }}
+        with:
+          severity: error
+          details: Build failed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [simple_deployment_pipeline]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04 
     steps: 
     - uses: actions/checkout@v2
       with:
@@ -51,5 +65,5 @@ jobs:
       if: ${{ github.event_name == 'push' }} 
       uses: anothrNick/github-tag-action@1.36.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DEFAULT_BUMP: minor 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        DEFAULT_BUMP: minor
