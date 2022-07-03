@@ -42,7 +42,7 @@ jobs:
           delay: 5
       - name: Test Success
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ success() }}
+        if: ${{ success() && github.event_name == 'push' }} 
         with:
           severity: info
           details: A new version of Pokedex deployed
