@@ -8,7 +8,7 @@ const PokemonList = ({ pokemonList }) =>  (
           <div
             className="list-item-name"
           >
-            {/* {name} */}
+            {name}
           </div>
         </Link>
       ))}
